@@ -7,11 +7,24 @@
   <title>Lemon Landing</title>
 
   <!-- CSS -->
-  <link rel="stylesheet" href="./styles.css">
+  <link rel="stylesheet" href="styles.css">
 
   <!-- Favicon -->
-  <link rel="shortcut icon" href="/IMG_0384.png" type="image/x-icon">
+  <link rel="shortcut icon" href="logo.png" type="image/x-icon">
 
+  <!-- Meta Pixel (sin ID) -->
+  <script>
+    !function(f,b,e,v,n,t,s){
+    if(f.fbq)return;n=f.fbq=function(){n.callMethod?
+    n.callMethod.apply(n,arguments):n.queue.push(arguments)};
+    if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';
+    n.queue=[];t=b.createElement(e);t.async=!0;
+    t.src=v;s=b.getElementsByTagName(e)[0];
+    s.parentNode.insertBefore(t,s)
+    }(window, document,'script','https://connect.facebook.net/en_US/fbevents.js');
+
+    fbq('track', 'PageView');
+  </script>
 
 </head>
 
@@ -24,7 +37,7 @@
       <!-- HEADER -->
       <div>
         <div>
-          <img src="./assets/logo/IMG_0384.png" alt="logo">
+          <img src="logo.png" alt="logo">
         </div>
 
         <div>
@@ -46,7 +59,7 @@
       <div>
         <button>
           Continuar
-          <img src="./assets/iconos/whatsapp.png" alt="wpp">
+          <img src="whatsapp.png" alt="wpp">
         </button>
       </div>
 
@@ -59,9 +72,8 @@
   </div>
 
   <!-- JS -->
-  <script src="./main.js"></script>
+  <script src="main.js"></script>
 
 </body>
 
 </html>
-
