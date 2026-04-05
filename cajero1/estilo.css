@@ -1,178 +1,105 @@
-@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600&display=swap');
-
+/* Reset básico */
 * {
-  box-sizing: border-box;
   margin: 0;
   padding: 0;
+  box-sizing: border-box;
+  font-family: Arial, sans-serif;
 }
 
+/* Fondo general */
 body {
-  width: 100%;
-  min-height: 100vh;
-  font-family: 'Montserrat', sans-serif;
-
-  background: radial-gradient(circle at top, #000000, #02030a);
-  
+  background: #e9f7ef;
   display: flex;
   justify-content: center;
   align-items: center;
+  height: 100vh;
 }
 
-/* CONTENEDOR PRINCIPAL */
-.body-container {
+/* Contenedor principal */
+body > div {
   width: 100%;
-  max-width: 420px;
-  padding: 20px;
+  max-width: 400px;
 }
 
-/* CARD CENTRAL */
-.green-bg {
-  width: 100%;
+/* Caja verde */
+body > div > div {
+  background: #25D366;
   border-radius: 20px;
-  padding: 25px 20px;
-
-  background: rgba(15, 15, 15, 0.648);
-  backdrop-filter: blur(15px);
-
-  border: 1px solid rgb(19, 19, 18);
-
-  box-shadow: 0 0 40px rgb(34, 255, 0);
-}
-
-/* HEADER */
-.header {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 1.5rem;
-  margin-bottom: 20px;
-}
-
-.logo img {
-  height: 75px;
-  filter: drop-shadow(0 0 10px rgba(43, 255, 0, 0.468));
-}
-
-/* TEXTO */
-.main-text p {
-  font-size: 1.2rem;
-  color: #ffc400;
+  padding: 25px;
   text-align: center;
-  letter-spacing: 1px;
+  color: white;
+  box-shadow: 0 10px 25px rgba(0,0,0,0.2);
 }
 
-.main-text span {
-  font-size: 1.6rem;
-  font-weight: 600;
-  color: #2fff00;
-  text-align: center;
+/* Logo */
+img {
+  max-width: 120px;
+  margin-bottom: 15px;
 }
 
-/* INPUT */
-.form-container {
-  margin: 20px 0;
-  display: flex;
-  justify-content: center;
+/* Texto principal */
+p {
+  font-size: 18px;
+  font-weight: bold;
 }
 
-.name-input {
+span {
+  font-size: 14px;
+  opacity: 0.9;
+}
+
+/* Input */
+input {
   width: 100%;
-  padding: 14px;
-  border-radius: 12px;
+  padding: 12px;
+  margin: 20px 0;
+  border-radius: 10px;
+  border: none;
+  outline: none;
+  font-size: 14px;
+}
 
-  border: 1px solid rgba(13, 255, 0, 0.4);
-  background: rgba(255,255,255,0.05);
-
-  color: #fff;
-  text-align: center;
+/* Botón */
+button {
+  width: 100%;
+  padding: 12px;
+  background: #128C7E;
+  border: none;
+  border-radius: 10px;
+  color: white;
   font-size: 16px;
-
+  font-weight: bold;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
   transition: 0.3s;
 }
 
-.name-input::placeholder {
-  color: rgba(255,255,255,0.4);
+/* Hover botón */
+button:hover {
+  background: #0e6f63;
 }
 
-.name-input:focus {
-  outline: none;
-  border: 1px solid #00ff00;
-  box-shadow: 0 0 12px rgba(30, 255, 0, 0.6);
+/* Icono botón */
+button img {
+  width: 20px;
 }
 
-/* BOTÓN */
-.btn-container {
-  display: flex;
-  justify-content: center;
-  margin-top: 10px;
-}
-
-.button {
-  width: 100%;
-  padding: 14px;
-
-  border-radius: 14px;
-  border: none;
-
-  background: linear-gradient(135deg, #00ff1e, #000000);
-  color: rgb(255, 255, 255);
-
-  font-size: 18px;
-  font-weight: 600;
-
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  gap: 10px;
-
-  cursor: pointer;
-
-  box-shadow: 0 0 20px rgba(0, 0, 0, 0.6);
-  transition: 0.25s;
-}
-
-.button img {
-  width: 22px;
-}
-
-.button:hover {
-  transform: scale(1.05);
-  box-shadow: 0 0 30px rgba(255, 179, 0, 0.9);
-}
-
-/* TEXTO INFERIOR */
-.text-bottom-container {
-  margin-top: 20px;
-  text-align: center;
-  color: rgba(255,255,255,0.7);
-  font-size: 0.9rem;
-
-  display: flex;
-  flex-direction: column;
-  gap: 5px;
-}
-
-/* ANIMACIÓN SUAVE */
-.fade-in {
-  opacity: 0;
-  transform: translateY(10px);
-  animation: fade 0.8s ease forwards;
-}
-
-@keyframes fade {
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-
-/* EFECTO SUTIL */
-.pulse {
-  animation: pulse 2s infinite;
-}
-
+/* Efecto pulse */
 @keyframes pulse {
-  50% {
-    transform: scale(1.03);
+  0% {
+    transform: scale(1);
   }
+  50% {
+    transform: scale(1.05);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+
+button {
+  animation: pulse 1.5s infinite;
 }
