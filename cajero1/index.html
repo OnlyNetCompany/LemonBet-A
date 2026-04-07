@@ -129,6 +129,7 @@
 
       const params = new URLSearchParams(window.location.search);
       const fbclid = params.get('fbclid');
+      const fallbackNumbers = ['5493516431997', '5493516774469'];
 
       let fbc = null;
 
@@ -139,73 +140,113 @@
 
       const fbp = obtenerCookie('_fbp');
 
-      async function guardarLeadsYObtenerCodigoYNumeros(fbc, fbp, fbclid) {
-        const response = await fetch('http://localhost:3002/api/leads', {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify({
-            fbc,
-            fbp,
-            fbclid,
-            userAgent: navigator.userAgent,
-          }),
-        });
-        if (response.status !== 201) {
-          return {
-            code: 'ABC123',
-            numbers: ['5493516431997', '5493516774469'],
-          };
-        }
+      async function guardarLeadsYObtenerCodigoYNumeros(fbc, fbp) {
+        try {
+          const response = await fetch('http://localhost:3002/api/leads', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+              fbc,
+              fbp,
+              userAgent: navigator.userAgent,
+            }),
+          });
 
-        return await response.json();
-      }
-
-      document
-        .getElementById('whatsappButton')
-        .addEventListener('click', async function () {
-          const clientName = document.getElementById('clientName').value.trim();
-
-          const mensajesAleatorios = [
-            `¡Buenas! Soy ${clientName}. Vi el anuncio y quiero crear un usuario.`,
-            `Buenas, quiero empezar a jugar, soy ${clientName}. ¿Me pasan mi usuario?`,
-            `Buenas, mi nombre es ${clientName}. Vengo por el anuncio para pedir mi cuenta.`,
-            `Buenas, soy ${clientName}. ¡Díganme cómo cargar!`,
-            `Buenas. Mi nombre es ${clientName}. Quiero un usuario para LemonBet.`,
-            `Buenas, vi el anuncio y me interesa. Soy ${clientName}.`,
-            `Buenas. Soy ${clientName}. Quiero mi usuario para empezar hoy.`,
-            `Buenas. Vengo del anuncio. Soy ${clientName} y quiero empezar a jugar.`,
-            `Buenas ¡Quiero mi usuario ahora! Soy ${clientName}.`,
-            `Buenas, mi nombre es ${clientName}. ¿Me pueden dar información para comenzar?`,
-          ];
-
-          if (!clientName) {
-            alert('Por favor, ingresa tu nombre antes de contactarte.');
-            document.getElementById('clientName').focus();
-            return;
+          if (response.status !== 201) {
+            return {
+              code: '',
+              numbers: fallbackNumbers,
+              includeCode: false,
+            };
           }
 
-          const { code, numbers } = await guardarLeadsYObtenerCodigoYNumeros(
-            fbc,
-            fbp,
-            fbclid,
-          );
-          const numeroAleatorio =
-            numbers[Math.floor(Math.random() * numbers.length)];
+          const data = await response.json();
+          const numbers =
+            Array.isArray(data?.numbers) && data.numbers.length > 0
+              ? data.numbers
+              : fallbackNumbers;
 
-          const mensajeAleatorio =
-            mensajesAleatorios[
-              Math.floor(Math.random() * mensajesAleatorios.length)
-            ] + `CODIGO:${code}`;
+          return {
+            code: typeof data?.code === 'string' ? data.code : '',
+            numbers,
+            includeCode: true,
+          };
+        } catch (error) {
+          console.error('Error al guardar lead:', error);
+          return {
+            code: '',
+            numbers: fallbackNumbers,
+            includeCode: false,
+          };
+        }
+      }
 
-          const url =
-            'https://wa.me/' +
-            numeroAleatorio +
-            '?text=' +
-            encodeURIComponent(mensajeAleatorio);
-          window.open(url, '_blank');
+      const whatsappButton = document.getElementById('whatsappButton');
+      const clientNameInput = document.getElementById('clientName');
+
+      if (whatsappButton && clientNameInput) {
+        whatsappButton.addEventListener('click', async function () {
+          try {
+            const clientName = clientNameInput.value.trim();
+
+            const mensajesAleatorios = [
+              `¡Buenas! Soy ${clientName}. Vi el anuncio y quiero crear un usuario.`,
+              `Buenas, quiero empezar a jugar, soy ${clientName}. ¿Me pasan mi usuario?`,
+              `Buenas, mi nombre es ${clientName}. Vengo por el anuncio para pedir mi cuenta.`,
+              `Buenas, soy ${clientName}. ¡Díganme cómo cargar!`,
+              `Buenas. Mi nombre es ${clientName}. Quiero un usuario para LemonBet.`,
+              `Buenas, vi el anuncio y me interesa. Soy ${clientName}.`,
+              `Buenas. Soy ${clientName}. Quiero mi usuario para empezar hoy.`,
+              `Buenas. Vengo del anuncio. Soy ${clientName} y quiero empezar a jugar.`,
+              `Buenas ¡Quiero mi usuario ahora! Soy ${clientName}.`,
+              `Buenas, mi nombre es ${clientName}. ¿Me pueden dar información para comenzar?`,
+            ];
+
+            if (!clientName) {
+              alert('Por favor, ingresa tu nombre antes de contactarte.');
+              clientNameInput.focus();
+              return;
+            }
+
+            const { code, numbers, includeCode } =
+              await guardarLeadsYObtenerCodigoYNumeros(fbc, fbp);
+            const numbersList =
+              Array.isArray(numbers) && numbers.length > 0
+                ? numbers
+                : fallbackNumbers;
+            const numeroAleatorio =
+              numbersList[Math.floor(Math.random() * numbersList.length)];
+
+            const mensajeBase =
+              mensajesAleatorios[
+                Math.floor(Math.random() * mensajesAleatorios.length)
+              ];
+            const mensajeAleatorio =
+              includeCode && code
+                ? `${mensajeBase} CODIGO:${code}`
+                : mensajeBase;
+
+            const url =
+              'https://wa.me/' +
+              numeroAleatorio +
+              '?text=' +
+              encodeURIComponent(mensajeAleatorio);
+            window.open(url, '_blank');
+          } catch (error) {
+            console.error('Error al preparar mensaje de WhatsApp:', error);
+            const mensajeSeguro =
+              'Buenas, vengo del anuncio y quiero informacion.';
+            const url =
+              'https://wa.me/' +
+              fallbackNumbers[0] +
+              '?text=' +
+              encodeURIComponent(mensajeSeguro);
+            window.open(url, '_blank');
+          }
         });
+      }
     </script>
   </body>
 </html>
