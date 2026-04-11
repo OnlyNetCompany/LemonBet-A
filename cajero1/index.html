@@ -129,7 +129,9 @@
 
       const params = new URLSearchParams(window.location.search);
       const fbclid = params.get('fbclid');
-      const fallbackNumbers = ['5493516431997', '5493516774469'];
+      console.log('fbclid obtenido:', fbclid);
+      const META_PIXEL_ID = '24914245078193946';
+      const fallbackNumber = '5493516431997';
 
       let fbc = null;
 
@@ -140,7 +142,7 @@
 
       const fbp = obtenerCookie('_fbp');
 
-      async function guardarLeadsYObtenerCodigoYNumeros(fbc, fbp) {
+      async function guardarLeadsYObtenerCodigoYNumero(fbc, fbp) {
         try {
           const response = await fetch('http://localhost:3002/api/leads', {
             method: 'POST',
@@ -151,33 +153,33 @@
               fbc,
               fbp,
               userAgent: navigator.userAgent,
+              metaPixelId: META_PIXEL_ID,
             }),
           });
 
           if (response.status !== 201) {
             return {
               code: '',
-              numbers: fallbackNumbers,
+              number: fallbackNumber,
               includeCode: false,
             };
           }
 
           const data = await response.json();
-          const numbers =
-            Array.isArray(data?.numbers) && data.numbers.length > 0
-              ? data.numbers
-              : fallbackNumbers;
 
           return {
             code: typeof data?.code === 'string' ? data.code : '',
-            numbers,
+            number:
+              typeof data?.number === 'string' && data.number
+                ? data.number
+                : fallbackNumber,
             includeCode: true,
           };
         } catch (error) {
           console.error('Error al guardar lead:', error);
           return {
             code: '',
-            numbers: fallbackNumbers,
+            number: fallbackNumber,
             includeCode: false,
           };
         }
@@ -210,14 +212,8 @@
               return;
             }
 
-            const { code, numbers, includeCode } =
-              await guardarLeadsYObtenerCodigoYNumeros(fbc, fbp);
-            const numbersList =
-              Array.isArray(numbers) && numbers.length > 0
-                ? numbers
-                : fallbackNumbers;
-            const numeroAleatorio =
-              numbersList[Math.floor(Math.random() * numbersList.length)];
+            const { code, number, includeCode } =
+              await guardarLeadsYObtenerCodigoYNumero(fbc, fbp);
 
             const mensajeBase =
               mensajesAleatorios[
@@ -230,7 +226,7 @@
 
             const url =
               'https://wa.me/' +
-              numeroAleatorio +
+              number +
               '?text=' +
               encodeURIComponent(mensajeAleatorio);
             window.open(url, '_blank');
@@ -240,7 +236,7 @@
               'Buenas, vengo del anuncio y quiero informacion.';
             const url =
               'https://wa.me/' +
-              fallbackNumbers[0] +
+              fallbackNumber +
               '?text=' +
               encodeURIComponent(mensajeSeguro);
             window.open(url, '_blank');
