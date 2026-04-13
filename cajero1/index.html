@@ -111,9 +111,9 @@
 
     <script>
       // ── CONFIG (editar por cajero) ────────────────────────────
-      const META_PIXEL_ID   = '24914245078193946';
+      const META_PIXEL_ID = '976916338006290';
       const FALLBACK_NUMBER = '5493516431997';
-      const API_URL         = 'https://app.onlylemon.app/api/leads';
+      const API_URL = 'https://app.onlylemon.app/api/leads';
       // ─────────────────────────────────────────────────────────
 
       fbq('init', META_PIXEL_ID);
@@ -199,15 +199,24 @@
               await guardarLeadsYObtenerCodigoYNumero(fbc, fbp);
 
             const opciones = mensajesAleatorios(clientName);
-            const mensajeBase = opciones[Math.floor(Math.random() * opciones.length)];
-            const mensaje = includeCode && code
-              ? `${mensajeBase} CODIGO:${code}`
-              : mensajeBase;
+            const mensajeBase =
+              opciones[Math.floor(Math.random() * opciones.length)];
+            const mensaje =
+              includeCode && code
+                ? `${mensajeBase} CODIGO:${code}`
+                : mensajeBase;
 
-            window.open(`https://wa.me/${number}?text=${encodeURIComponent(mensaje)}`, '_blank');
+            window.open(
+              `https://wa.me/${number}?text=${encodeURIComponent(mensaje)}`,
+              '_blank',
+            );
           } catch {
-            const mensajeSeguro = 'Buenas, vengo del anuncio y quiero informacion.';
-            window.open(`https://wa.me/${FALLBACK_NUMBER}?text=${encodeURIComponent(mensajeSeguro)}`, '_blank');
+            const mensajeSeguro =
+              'Buenas, vengo del anuncio y quiero informacion.';
+            window.open(
+              `https://wa.me/${FALLBACK_NUMBER}?text=${encodeURIComponent(mensajeSeguro)}`,
+              '_blank',
+            );
           }
         });
       }
