@@ -127,15 +127,10 @@
       }
 
       const fbclid = new URLSearchParams(window.location.search).get('fbclid');
-      let fbc = fbclid
-        ? `fb.1.${Date.now()}.${fbclid}`
-        : (obtenerCookie('_fbc') ?? null);
-
       if (fbclid) {
+        const fbc = `fb.1.${Date.now()}.${fbclid}`;
         document.cookie = `_fbc=${fbc}; path=/; max-age=7776000`; // 90 días
       }
-
-      const fbp = obtenerCookie('_fbp') ?? null;
 
       const mensajesAleatorios = (nombre) => [
         `¡Buenas! Soy ${nombre}. Vi el anuncio y quiero crear un usuario.`,
@@ -195,6 +190,9 @@
           }
 
           try {
+            const fbp = obtenerCookie('_fbp') ?? null;
+            const fbc = obtenerCookie('_fbc') ?? null;
+
             const { code, number, includeCode } =
               await guardarLeadsYObtenerCodigoYNumero(fbc, fbp);
 
