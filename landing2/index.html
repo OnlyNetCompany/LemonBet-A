@@ -185,6 +185,78 @@
       </div>
     </div>
 
+    <script>
+      // ── Testimonials carousel (auto, sin controles) ─────────
+      (function () {
+        const track = document.getElementById('carouselTrack');
+        if (!track) return;
+        const total = track.querySelectorAll('.testimonial').length;
+        let idx = 0;
+        setInterval(() => {
+          idx = (idx + 1) % total;
+          track.style.transform = `translateX(-${idx * 100}%)`;
+        }, 4000);
+      })();
+
+      // ── Win notifications (popup cada 5s) ───────────────────
+      const winners = [
+        { name: 'Carlos Pérez', city: 'Buenos Aires', amount: 45000 },
+        { name: 'María Gómez', city: 'Córdoba', amount: 78500 },
+        { name: 'Juan Rodríguez', city: 'Rosario', amount: 32000 },
+        { name: 'Lucía Fernández', city: 'Mendoza', amount: 120000 },
+        { name: 'Diego Sosa', city: 'La Plata', amount: 56000 },
+        { name: 'Sofía Martínez', city: 'Mar del Plata', amount: 98000 },
+        { name: 'Martín López', city: 'Tucumán', amount: 41500 },
+        { name: 'Camila Ruiz', city: 'Salta', amount: 67000 },
+        { name: 'Federico Díaz', city: 'Neuquén', amount: 152000 },
+        { name: 'Valentina Torres', city: 'Santa Fe', amount: 38000 },
+        { name: 'Nicolás Acosta', city: 'San Juan', amount: 84000 },
+        { name: 'Agustina Romero', city: 'Bahía Blanca', amount: 73500 },
+        { name: 'Matías Suárez', city: 'Corrientes', amount: 51000 },
+        { name: 'Florencia Vega', city: 'Resistencia', amount: 60000 },
+        { name: 'Bruno Castro', city: 'Posadas', amount: 105000 },
+      ];
+
+      const winNotif = document.getElementById('winNotification');
+      const winNameEl = document.getElementById('winName');
+      const winAmountEl = document.getElementById('winAmount');
+      const winCityEl = document.getElementById('winCity');
+      const winTimeEl = document.getElementById('winTime');
+
+      const formatARS = (n) =>
+        '$' + n.toLocaleString('es-AR', { maximumFractionDigits: 0 });
+
+      const timeAgo = () => {
+        const opts = [
+          'unos segundos',
+          '1 minuto',
+          '2 minutos',
+          '3 minutos',
+          '5 minutos',
+          '8 minutos',
+          '12 minutos',
+        ];
+        return opts[Math.floor(Math.random() * opts.length)];
+      };
+
+      let winIdx = 0;
+      const shuffled = [...winners].sort(() => Math.random() - 0.5);
+
+      function showNextWin() {
+        const w = shuffled[winIdx % shuffled.length];
+        winIdx++;
+        winNameEl.textContent = w.name;
+        winAmountEl.textContent = formatARS(w.amount);
+        winCityEl.textContent = w.city;
+        winTimeEl.textContent = timeAgo();
+        winNotif.classList.add('show');
+        setTimeout(() => winNotif.classList.remove('show'), 2600);
+      }
+
+      setTimeout(showNextWin, 1500);
+      setInterval(showNextWin, 5000);
+    </script>
+
     <script src="https://app.onlylemon.app/embed/ef154391-72cc-471c-a824-6ffb6b6cc9b7.js" data-cta-mode="solo-logica" async></script>
   </body>
 </html>

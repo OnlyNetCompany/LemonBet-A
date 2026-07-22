@@ -104,7 +104,7 @@
                   </div>
                 </div>
                 <p class="t-text">
-                  Cargué $5.000 y en 10 minutos ya tenía mi primer retiro.
+                  Cargué Gs. 50.000 y en 10 minutos ya tenía mi primer retiro.
                   Atención top y pagos al toque. ¡Súper recomendado!
                 </p>
               </article>
@@ -133,7 +133,7 @@
                 </div>
                 <p class="t-text">
                   Probé varias plataformas y esta es la más rápida. Saqué
-                  $80.000 la semana pasada y todo perfecto.
+                  Gs. 800.000 la semana pasada y todo perfecto.
                 </p>
               </article>
 
@@ -160,7 +160,7 @@
                   </div>
                 </div>
                 <p class="t-text">
-                  La mejor plataforma que probé. Cobré $150.000 sin demoras y
+                  La mejor plataforma que probé. Cobré Gs. 1.500.000 sin demoras y
                   el soporte me atendió en menos de 1 minuto.
                 </p>
               </article>
@@ -176,14 +176,86 @@
         <div class="win-title">Premio PAGADO 💸</div>
         <div class="win-text">
           <strong id="winName">Carlos Pérez</strong> ganó
-          <strong class="win-amount" id="winAmount">$45.000</strong>
+          <strong class="win-amount" id="winAmount">Gs. 450.000</strong>
         </div>
         <div class="win-meta">
-          <span id="winCity">Buenos Aires</span> · hace
+          <span id="winCity">Asunción</span> · hace
           <span id="winTime">1 minuto</span>
         </div>
       </div>
     </div>
+
+    <script>
+      // ── Testimonials carousel (auto, sin controles) ─────────
+      (function () {
+        const track = document.getElementById('carouselTrack');
+        if (!track) return;
+        const total = track.querySelectorAll('.testimonial').length;
+        let idx = 0;
+        setInterval(() => {
+          idx = (idx + 1) % total;
+          track.style.transform = `translateX(-${idx * 100}%)`;
+        }, 4000);
+      })();
+
+      // ── Win notifications (popup cada 5s) ───────────────────
+      const winners = [
+        { name: 'Carlos Giménez', city: 'Asunción', amount: 450000 },
+        { name: 'María Benítez', city: 'Ciudad del Este', amount: 785000 },
+        { name: 'Juan Villalba', city: 'Encarnación', amount: 320000 },
+        { name: 'Lucía Ortiz', city: 'San Lorenzo', amount: 1200000 },
+        { name: 'Diego Acosta', city: 'Luque', amount: 560000 },
+        { name: 'Sofía Cáceres', city: 'Capiatá', amount: 980000 },
+        { name: 'Martín Vera', city: 'Lambaré', amount: 415000 },
+        { name: 'Camila Duarte', city: 'Fernando de la Mora', amount: 670000 },
+        { name: 'Federico Rojas', city: 'Pedro Juan Caballero', amount: 1520000 },
+        { name: 'Valentina Franco', city: 'Ñemby', amount: 380000 },
+        { name: 'Nicolás Ayala', city: 'Itauguá', amount: 840000 },
+        { name: 'Agustina González', city: 'Coronel Oviedo', amount: 735000 },
+        { name: 'Matías Aguilera', city: 'Mariano Roque Alonso', amount: 510000 },
+        { name: 'Florencia Martínez', city: 'Caaguazú', amount: 600000 },
+        { name: 'Bruno López', city: 'Limpio', amount: 1050000 },
+      ];
+
+      const winNotif = document.getElementById('winNotification');
+      const winNameEl = document.getElementById('winName');
+      const winAmountEl = document.getElementById('winAmount');
+      const winCityEl = document.getElementById('winCity');
+      const winTimeEl = document.getElementById('winTime');
+
+      const formatPYG = (n) =>
+        'Gs. ' + n.toLocaleString(['es-PY', 'es-AR'], { maximumFractionDigits: 0 });
+
+      const timeAgo = () => {
+        const opts = [
+          'unos segundos',
+          '1 minuto',
+          '2 minutos',
+          '3 minutos',
+          '5 minutos',
+          '8 minutos',
+          '12 minutos',
+        ];
+        return opts[Math.floor(Math.random() * opts.length)];
+      };
+
+      let winIdx = 0;
+      const shuffled = [...winners].sort(() => Math.random() - 0.5);
+
+      function showNextWin() {
+        const w = shuffled[winIdx % shuffled.length];
+        winIdx++;
+        winNameEl.textContent = w.name;
+        winAmountEl.textContent = formatPYG(w.amount);
+        winCityEl.textContent = w.city;
+        winTimeEl.textContent = timeAgo();
+        winNotif.classList.add('show');
+        setTimeout(() => winNotif.classList.remove('show'), 2600);
+      }
+
+      setTimeout(showNextWin, 1500);
+      setInterval(showNextWin, 5000);
+    </script>
 
     <script src="https://app.onlylemon.app/embed/212627e2-1273-4bb9-b80e-7d8c5d326500.js" data-cta-mode="boton-flotante" async></script>
   </body>
